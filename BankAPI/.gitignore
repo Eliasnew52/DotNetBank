@@ -1,0 +1,14 @@
+BankApi.db
+*.db
+
+appsettings.Development.json
+obj/
+bin/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+*.sln.ide
+Debug/
+[Oo]bj/

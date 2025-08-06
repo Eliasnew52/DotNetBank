@@ -1,0 +1,23 @@
+using BankApi.Data;
+using BankApi.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace BankApi.Services
+{
+    public class ClientService : IClientService
+    {
+        private readonly ApplicationDBContext _context;
+
+        public ClientService(ApplicationDBContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<Client> CreateClientAsync(Client client)
+        {
+            _context.Clients.Add(client);
+            await _context.SaveChangesAsync();
+            return client;
+        }
+    }
+}
