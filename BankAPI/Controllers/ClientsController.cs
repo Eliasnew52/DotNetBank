@@ -6,10 +6,10 @@ namespace BankApi.Controllers
 {
     // This controller handles client-related operations
     // The route is prefixed with "api/clients"
-    // Route("api/[controller]") means our controller name will be used in the URL
 
-    [Route("api/[controller]")]
+
     [ApiController]
+    [Route("api/clients")]
 
     // ClientsController is responsible for managing client-related requests
     // It uses the IClientService to interact with client data
