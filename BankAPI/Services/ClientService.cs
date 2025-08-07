@@ -24,5 +24,18 @@ namespace BankApi.Services
         {
             return await _context.Clients.Include(c => c.Accounts).ToListAsync();
         }
+
+        public async Task<Client> GetClientByIdAsync(Guid id)
+        {
+            var client = await _context.Clients
+                .Include(c => c.Accounts)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (client == null)
+            {
+                throw new ArgumentException("Client not found.");
+            }
+            return client;
+        }
     }
 }

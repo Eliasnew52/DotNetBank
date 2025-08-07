@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
+using System.Text.Json.Serialization;
 namespace BankApi.Models
 {
     public class Client
@@ -20,6 +20,7 @@ namespace BankApi.Models
         public required string IdentificationNumber { get; set; }
 
         // Navigation property for related accounts (in terms of Entity Framework)
+        [JsonIgnore]
         public ICollection<Account> Accounts { get; set; } = new List<Account>();
 
         

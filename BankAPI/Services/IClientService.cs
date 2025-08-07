@@ -9,5 +9,7 @@ namespace BankApi.Services
     {
         Task<Client> CreateClientAsync(Client client);
         Task<IEnumerable<Client>> GetAllClientsAsync();
+
+        Task<Client> GetClientByIdAsync(Guid id);
     }
 }

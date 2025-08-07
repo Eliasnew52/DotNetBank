@@ -40,6 +40,23 @@ namespace BankApi.Controllers
             var clients = await _clientService.GetAllClientsAsync();
             return Ok(clients);
         }
-        
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetClientById([FromRoute] Guid id)
+        {
+            try
+            {
+                var client = await _clientService.GetClientByIdAsync(id);
+                if (client == null)
+                {
+                    return NotFound();
+                }
+                return Ok(client);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
-}           
+}
