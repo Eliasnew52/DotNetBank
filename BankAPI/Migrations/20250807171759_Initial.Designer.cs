@@ -3,6 +3,7 @@ using System;
 using BankApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,18 +11,20 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250807171759_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
 
             modelBuilder.Entity("BankApi.Models.Account", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("AccountNumber")
                         .IsRequired()
@@ -34,8 +37,8 @@ namespace BankAPI.Migrations
                     b.Property<decimal>("Balance")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("ClientId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -46,6 +49,9 @@ namespace BankAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AccountNumber")
+                        .IsUnique();
+
                     b.HasIndex("ClientId");
 
                     b.ToTable("Accounts");
@@ -53,9 +59,9 @@ namespace BankAPI.Migrations
 
             modelBuilder.Entity("BankApi.Models.Client", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("TEXT");
@@ -76,6 +82,9 @@ namespace BankAPI.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdentificationNumber")
+                        .IsUnique();
 
                     b.ToTable("Clients");
                 });
@@ -118,9 +127,6 @@ namespace BankAPI.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("AccountId1")
-                        .HasColumnType("TEXT");
-
                     b.Property<decimal>("Amount")
                         .HasColumnType("TEXT");
 
@@ -136,7 +142,7 @@ namespace BankAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId1");
+                    b.HasIndex("AccountId");
 
                     b.ToTable("Transactions");
                 });
@@ -156,7 +162,7 @@ namespace BankAPI.Migrations
                 {
                     b.HasOne("BankApi.Models.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountId1")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

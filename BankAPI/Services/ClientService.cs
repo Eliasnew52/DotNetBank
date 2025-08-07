@@ -19,5 +19,10 @@ namespace BankApi.Services
             await _context.SaveChangesAsync();
             return client;
         }
+
+        public async Task<IEnumerable<Client>> GetAllClientsAsync()
+        {
+            return await _context.Clients.Include(c => c.Accounts).ToListAsync();
+        }
     }
 }

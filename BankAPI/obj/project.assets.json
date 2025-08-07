@@ -3662,11 +3662,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/luis/Desktop/TechAssestment/DotNetBank/BankAPI/BankAPI.csproj",
+      "projectUniqueName": "/Users/luis/Desktop/Project/DotNetBank/BankAPI/BankAPI.csproj",
       "projectName": "BankAPI",
-      "projectPath": "/Users/luis/Desktop/TechAssestment/DotNetBank/BankAPI/BankAPI.csproj",
+      "projectPath": "/Users/luis/Desktop/Project/DotNetBank/BankAPI/BankAPI.csproj",
       "packagesPath": "/Users/luis/.nuget/packages/",
-      "outputPath": "/Users/luis/Desktop/TechAssestment/DotNetBank/BankAPI/obj/",
+      "outputPath": "/Users/luis/Desktop/Project/DotNetBank/BankAPI/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/luis/.nuget/NuGet/NuGet.Config"

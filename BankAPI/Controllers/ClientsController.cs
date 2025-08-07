@@ -33,5 +33,13 @@ namespace BankApi.Controllers
             var createdClient = await _clientService.CreateClientAsync(client);
             return CreatedAtAction(nameof(CreateClient), new { id = createdClient.Id }, createdClient);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllClients()
+        {
+            var clients = await _clientService.GetAllClientsAsync();
+            return Ok(clients);
+        }
+        
     }
 }           

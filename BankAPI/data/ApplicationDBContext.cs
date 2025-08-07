@@ -16,17 +16,18 @@ namespace BankApi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            // Unique index for IdentificationNumber in Client
             modelBuilder.Entity<Client>()
-                .HasIndex(c => c.IdentificationNumber)
-                .IsUnique();
+                .HasMany(c => c.Accounts)
+                .WithOne(a => a.Client)
+                .HasForeignKey(a => a.ClientId)
+                .IsRequired();
 
-            // Unique index for AccountNumber in Account
             modelBuilder.Entity<Account>()
-                .HasIndex(a => a.AccountNumber)
-                .IsUnique();
+                .HasOne(a => a.Client)
+                .WithMany(c => c.Accounts)
+                .HasForeignKey(a => a.ClientId);
+
+            
         }
     }
 }

@@ -8,5 +8,6 @@ namespace BankApi.Services
     public interface IClientService
     {
         Task<Client> CreateClientAsync(Client client);
+        Task<IEnumerable<Client>> GetAllClientsAsync();
     }
 }
