@@ -1,6 +1,7 @@
 using BankApi.Data;
 using BankApi.Models;
 using Microsoft.EntityFrameworkCore;
+using BankApi.Dtos;
 
 namespace BankApi.Services
 {
@@ -32,7 +33,7 @@ namespace BankApi.Services
             return account;
         }
 
-        
+
         //Get account by ID
         public async Task<Account> GetAccountByIdAsync(Guid id)
         {
@@ -47,6 +48,7 @@ namespace BankApi.Services
             return account;
         }
 
+        //Get accounts by client ID
         public async Task<List<AccountSummaryDto>> GetAccountsByClientIdAsync(Guid clientId)
         {
             return await _context.Accounts
@@ -63,7 +65,38 @@ namespace BankApi.Services
                 .ToListAsync();
         }
 
-        
+        //Deposit Method
+        public async Task<TransactionDto> DepositAsync(Guid accountId, TransactionCreateDto dto)
+        {
+            if (dto.Amount <= 0)
+                throw new ArgumentException("Deposit Amount Must be Greater than zero.");
+
+            var account = await _context.Accounts.FindAsync(accountId);
+            if (account == null)
+                throw new ArgumentException("Account not found.");
+
+            account.Balance += dto.Amount;
+
+            var transaction = new Transaction
+            {
+                AccountId = accountId,
+                Amount = dto.Amount,
+                TransactionDate = DateTime.UtcNow,
+                TransactionType = "Deposit"
+            };
+
+            _context.Transactions.Add(transaction);
+            await _context.SaveChangesAsync();
+
+            return new TransactionDto
+            {
+                Id = transaction.Id,
+                Amount = transaction.Amount,
+                TransactionDate = transaction.TransactionDate,
+                TransactionType = transaction.TransactionType,
+                AccountId = transaction.AccountId
+            };
+        }
         
     }
 }

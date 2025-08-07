@@ -16,7 +16,9 @@ namespace BankApi.Controllers
         {
             _accountService = accountService;
         }
-
+        // Account Creation Endpoint
+        // This endpoint allows a client to create a new account
+        // It expects a clientId in the route and an AccountCreateDto in the request body
         [HttpPost]
         public async Task<IActionResult> CreateAccount([FromRoute] Guid clientId, [FromBody] AccountCreateDto dto)
         {
@@ -33,7 +35,7 @@ namespace BankApi.Controllers
                 AccountType = dto.AccountType,
                 Currency = dto.Currency,
                 Balance = dto.Balance
-                // CreatedAt and ClientId will be set in the service
+                // CreatedAt and ClientId will be set in the service :D
             };
 
             try
@@ -60,7 +62,7 @@ namespace BankApi.Controllers
 
             return Ok(account);
         }
-        
+
         [HttpGet("/api/clients/{clientId:guid}/accounts")]
         public async Task<IActionResult> GetAccountsByClientId([FromRoute] Guid clientId)
         {
@@ -72,7 +74,13 @@ namespace BankApi.Controllers
             return Ok(accounts);
         }
 
-
+        //Deposit Endpoint
+        [HttpPost("{id:guid}/deposit")]
+        public async Task<IActionResult> Deposit(Guid id, [FromBody] TransactionCreateDto dto)
+        {
+            var result = await _accountService.DepositAsync(id, dto);
+            return Ok(result);
+        }
 
     }
 }

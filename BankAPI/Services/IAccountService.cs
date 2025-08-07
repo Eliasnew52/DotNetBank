@@ -2,6 +2,7 @@
 //It defines the methods that the Account Service must implement
 
 using BankApi.Models;
+using BankApi.Dtos;
 
 namespace BankApi.Services
 {
@@ -10,6 +11,9 @@ namespace BankApi.Services
         Task<Account> CreateAccountAsync(Account account, Guid clientId);
         Task<Account> GetAccountByIdAsync(Guid id);
         Task<List<AccountSummaryDto>> GetAccountsByClientIdAsync(Guid clientId);
+
+        // Money Movement Methods
+        Task<TransactionDto> DepositAsync(Guid accountId, TransactionCreateDto dto);
 
     }
 }

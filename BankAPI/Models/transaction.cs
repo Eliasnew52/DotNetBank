@@ -22,7 +22,8 @@ namespace BankApi.Models
 
         // Foreign key to Account
         [Required]
-        public int AccountId { get; set; }
+        public Guid AccountId { get; set; }
         public Account Account { get; set; } = null!;
+
     }
 }   
