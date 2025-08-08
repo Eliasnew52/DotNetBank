@@ -32,13 +32,16 @@ Done as Technical Assestment
 
 ## 📦 Example Endpoints
 
-| Method | Endpoint                     | Description                    |
-| ------ | ---------------------------- | ------------------------------ |
-| GET    | `/api/clients`               | List all clients               |
-| GET    | `/api/clients/{id}`          | Get a client by ID             |
-| GET    | `/api/clients/{id}/accounts` | List all accounts for a client |
-| GET    | `/api/accounts/{id}`         | Get account by ID              |
-| POST   | `/api/accounts`              | Create a new account           |
+| Method | Endpoint                                 | Description                          |
+| ------ | --------------------------------------- | ---------------------------------- |
+| GET    | `/api/clients`                          | List all clients                   |
+| GET    | `/api/clients/{clientId}`               | Get a client by ID                 |
+| GET    | `/api/clients/{clientId}/accounts`     | List all accounts for a client     |
+| POST   | `/api/clients/{clientId}/accounts`     | Create a new account for a client  |
+| GET    | `/api/accounts/{accountId}`             | Get account by ID                  |
+| POST   | `/api/clients/{clientId}/accounts/{accountId}/deposit`  | Deposit money into an account      |
+| POST   | `/api/clients/{clientId}/accounts/{accountId}/withdraw` | Withdraw money from an account     |
+
 
 ## 📝 API Documentation [Swagger]
 Once running, open your browser and navigate to:
