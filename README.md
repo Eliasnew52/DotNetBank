@@ -10,13 +10,41 @@ Done as Technical Assestment
 
 - ✅ Create, read, update, and delete? (Ofc Not 💀) Clients and accounts  
 - ✅ Retrieve all accounts for a specific client  
-- ✅ Support for multiple account types (Debt, Credit)  
+- ✅ Design Supports multiple account types (Debt, Credit)  
 - ✅ JSON serialization with cycle handling  
 - ✅ Interactive API docs powered by **Swagger UI**  
 - ✅ Lightweight SQLite database for easy setup  
 - ✅ Dependency Injection and clean architecture  
 
 ---
+## 💻 Running the Project Locally
+
+### Prerequisites
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+- [SQLite](https://sqlite.org/index.html) (optional, included via EF Core)
+- A tool like [Postman](https://www.postman.com/downloads/) or curl to test the API
+
+---
+
+### Setup & Run
+
+1. **Clone the repository**
+
+```bash```
+git clone https://github.com/Eliasnew52/DotNetBank.git
+2. **Restore Dependencies**
+cd DotNetBank
+dotnet restore
+3. **Apply Migrations**
+dotnet ef database update
+4. **Run the API**
+dotnet run
+
+The App will run on LocalHost:5010
+
+
+
 
 ## 🛠️ Technologies Used
 
@@ -48,4 +76,6 @@ Once running, open your browser and navigate to:
 
 
 - https://localhost:5010/swagger
+
+The HOW 2 USE of the Endpoints is There thx to the Swagger XML Document Gen
 

@@ -3,7 +3,6 @@ using BankApi.Models;
 using BankApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace BankApi.Controllers
 {
     [ApiController]
@@ -17,7 +16,12 @@ namespace BankApi.Controllers
             _accountService = accountService;
         }
 
-        // POST /api/clients/{clientId}/accounts
+        /// <summary>
+        /// Create a new bank account for a specific client.
+        /// </summary>
+        /// <param name="clientId">The ID of the client who owns the account.</param>
+        /// <param name="dto">Account creation data transfer object.</param>
+        /// <returns>The created account details.</returns>
         [HttpPost]
         public async Task<IActionResult> CreateAccount(Guid clientId, [FromBody] AccountCreateDto dto)
         {
@@ -47,7 +51,12 @@ namespace BankApi.Controllers
             }
         }
 
-        // GET /api/clients/{clientId}/accounts/{id}
+        /// <summary>
+        /// Get account details by account ID.
+        /// </summary>
+        /// <param name="clientId">The client ID who owns the account.</param>
+        /// <param name="id">The account ID.</param>
+        /// <returns>The account details.</returns>
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetAccountById(Guid clientId, Guid id)
         {
@@ -58,7 +67,11 @@ namespace BankApi.Controllers
             return Ok(account);
         }
 
-        // GET /api/clients/{clientId}/accounts
+        /// <summary>
+        /// Get all accounts belonging to a specific client.
+        /// </summary>
+        /// <param name="clientId">The client ID.</param>
+        /// <returns>List of accounts.</returns>
         [HttpGet]
         public async Task<IActionResult> GetAccountsByClientId(Guid clientId)
         {
@@ -70,7 +83,13 @@ namespace BankApi.Controllers
             return Ok(accounts);
         }
 
-        // POST /api/clients/{clientId}/accounts/{id}/deposit
+        /// <summary>
+        /// Deposit money into a specific account.
+        /// </summary>
+        /// <param name="clientId">The client ID who owns the account.</param>
+        /// <param name="id">The account ID.</param>
+        /// <param name="dto">Transaction data including the deposit amount.</param>
+        /// <returns>The transaction details.</returns>
         [HttpPost("{id:guid}/deposit")]
         public async Task<IActionResult> Deposit(Guid clientId, Guid id, [FromBody] TransactionCreateDto dto)
         {
@@ -78,13 +97,25 @@ namespace BankApi.Controllers
             return Ok(result);
         }
 
-        // POST /api/clients/{clientId}/accounts/{id}/withdraw
+        /// <summary>
+        /// Withdraw money from a specific account.
+        /// </summary>
+        /// <param name="clientId">The client ID who owns the account.</param>
+        /// <param name="id">The account ID.</param>
+        /// <param name="dto">Transaction data including the withdrawal amount.</param>
+        /// <returns>The transaction details.</returns>
         [HttpPost("{id:guid}/withdraw")]
         public async Task<IActionResult> Withdraw(Guid clientId, Guid id, [FromBody] TransactionCreateDto dto)
         {
             var result = await _accountService.WithdrawAsync(id, dto);
             return Ok(result);
         }
+
+        /// <summary>
+        /// Get the transaction history of a specific account.
+        /// </summary>
+        /// <param name="id">The account ID.</param>
+        /// <returns>A list of transactions for the account.</returns>
         [HttpGet("{id:guid}/transactions")]
         public async Task<IActionResult> GetTransactionHistory([FromRoute] Guid id)
         {
@@ -98,16 +129,12 @@ namespace BankApi.Controllers
             }
             catch (ArgumentException ex)
             {
-                // Account not found or invalid argument
                 return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                // General internal server error
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
     }
-
 }
