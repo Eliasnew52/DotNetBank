@@ -14,6 +14,7 @@ namespace BankApi.Services
 
         // Money Movement Methods
         Task<TransactionDto> DepositAsync(Guid accountId, TransactionCreateDto dto);
+        Task<TransactionDto> WithdrawAsync(Guid accountId, TransactionCreateDto dto);
 
     }
 }

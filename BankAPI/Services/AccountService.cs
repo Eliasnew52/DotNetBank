@@ -97,6 +97,42 @@ namespace BankApi.Services
                 AccountId = transaction.AccountId
             };
         }
+
+        //Withdraw Method
+        public async Task<TransactionDto> WithdrawAsync(Guid accountID, TransactionCreateDto dto)
+        {
+            if (dto.Amount <= 0)
+                throw new ArgumentException("Withdrawal Amount Must be Greater than zero.");
+
+            var account = await _context.Accounts.FindAsync(accountID);
+            if (account == null)
+                throw new ArgumentException("Account not found.");
+
+            if (account.Balance < dto.Amount)
+                throw new InvalidOperationException("Insufficient funds for withdrawal.");
+
+            account.Balance -= dto.Amount;
+            
+            var transaction = new Transaction
+            {
+                AccountId = accountID,
+                Amount = dto.Amount,
+                TransactionDate = DateTime.UtcNow,
+                TransactionType = "Withdrawal"
+            };
+
+            _context.Transactions.Add(transaction);
+            await _context.SaveChangesAsync();
+
+            return new TransactionDto
+            {
+                Id = transaction.Id,
+                Amount = transaction.Amount,
+                TransactionDate = transaction.TransactionDate,
+                TransactionType = transaction.TransactionType,
+                AccountId = transaction.AccountId
+            };
+        }
         
     }
 }

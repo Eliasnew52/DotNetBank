@@ -18,6 +18,7 @@ namespace BankApi.Models
 
         //When a User sends money to another user, this field will represent the transaction ID of the related transaction
         // Is a Nullable string, cause it may not always be applicable
+        //Like for Example Just a normal withdraw or deposit
         public string? RelatedTransactionId { get; set; }
 
         // Foreign key to Account
