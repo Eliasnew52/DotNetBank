@@ -16,5 +16,8 @@ namespace BankApi.Services
         Task<TransactionDto> DepositAsync(Guid accountId, TransactionCreateDto dto);
         Task<TransactionDto> WithdrawAsync(Guid accountId, TransactionCreateDto dto);
 
+        //History Methods
+        Task<List<TransactionHistoryDto>> GetTransactionHistoryAsync(Guid accountId);
+
     }
 }

@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BankApi.Controllers
 {
-    // This controller handles client-related operations
-    // The route is prefixed with "api/clients"
     [ApiController]
     [Route("api/clients")]
     public class ClientsController : ControllerBase
@@ -22,30 +20,60 @@ namespace BankApi.Controllers
         {
             if (client == null)
             {
-                return BadRequest("Client data is required.");
+                return BadRequest(new { error = "Client data is required." });
             }
 
-            var createdClient = await _clientService.CreateClientAsync(client);
-            return CreatedAtAction(nameof(GetClientById), new { id = createdClient.Id }, createdClient);
+            try
+            {
+                var createdClient = await _clientService.CreateClientAsync(client);
+                return CreatedAtAction(nameof(GetClientById), new { id = createdClient.Id }, createdClient);
+            }
+            catch (ArgumentException ex)
+            {
+                // ArgumentException is for invalid input or  my business rule violation
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception)
+            {
+                // Generic catch: so we dont give too much info to the client
+                return StatusCode(500, new { error = "An unexpected error occurred. Please try again later." });
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllClients()
         {
-            var clients = await _clientService.GetAllClientsAsync();
-            return Ok(clients);
+            try
+            {
+                var clients = await _clientService.GetAllClientsAsync();
+                return Ok(clients);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { error = "An unexpected error occurred. Please try again later." });
+            }
         }
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetClientById([FromRoute] Guid id)
         {
-            var client = await _clientService.GetClientByIdAsync(id);
-            if (client == null)
+            try
             {
-                return NotFound();
+                var client = await _clientService.GetClientByIdAsync(id);
+                if (client == null)
+                {
+                    return NotFound(new { error = "Client not found." });
+                }
+                return Ok(client);
             }
-            return Ok(client);
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { error = "An unexpected error occurred. Please try again later." });
+            }
         }
     }
-
 }

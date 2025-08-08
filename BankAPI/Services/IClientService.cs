@@ -11,5 +11,6 @@ namespace BankApi.Services
         Task<IEnumerable<Client>> GetAllClientsAsync();
 
         Task<Client> GetClientByIdAsync(Guid id);
+
     }
 }

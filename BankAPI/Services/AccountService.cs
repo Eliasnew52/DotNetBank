@@ -64,75 +64,120 @@ namespace BankApi.Services
                 })
                 .ToListAsync();
         }
-
-        //Deposit Method
+        //Deposit Service
         public async Task<TransactionDto> DepositAsync(Guid accountId, TransactionCreateDto dto)
         {
             if (dto.Amount <= 0)
-                throw new ArgumentException("Deposit Amount Must be Greater than zero.");
+                throw new ArgumentException("Deposit amount must be greater than zero.");
 
             var account = await _context.Accounts.FindAsync(accountId);
             if (account == null)
                 throw new ArgumentException("Account not found.");
 
-            account.Balance += dto.Amount;
-
-            var transaction = new Transaction
+            try
             {
-                AccountId = accountId,
-                Amount = dto.Amount,
-                TransactionDate = DateTime.UtcNow,
-                TransactionType = "Deposit"
-            };
+                account.Balance += dto.Amount;
 
-            _context.Transactions.Add(transaction);
-            await _context.SaveChangesAsync();
+                var transaction = new Transaction
+                {
+                    AccountId = accountId,
+                    Amount = dto.Amount,
+                    TransactionDate = DateTime.UtcNow,
+                    TransactionType = "Deposit",
+                    BalanceAfterTransaction = account.Balance
+                };
 
-            return new TransactionDto
+                _context.Transactions.Add(transaction);
+                await _context.SaveChangesAsync();
+
+                return new TransactionDto
+                {
+                    Id = transaction.Id,
+                    Amount = transaction.Amount,
+                    TransactionDate = transaction.TransactionDate,
+                    TransactionType = transaction.TransactionType,
+                    AccountId = transaction.AccountId,
+                    BalanceAfterTransaction = transaction.BalanceAfterTransaction
+                };
+            }
+            catch (DbUpdateException dbEx)
             {
-                Id = transaction.Id,
-                Amount = transaction.Amount,
-                TransactionDate = transaction.TransactionDate,
-                TransactionType = transaction.TransactionType,
-                AccountId = transaction.AccountId
-            };
+                // Log the error as needed
+                throw new Exception("Database update error during deposit. Please try again.", dbEx);
+            }
+            catch (Exception ex)
+            {
+                // Log the error as needed
+                throw new Exception("An unexpected error occurred during deposit.", ex);
+            }
         }
-
-        //Withdraw Method
-        public async Task<TransactionDto> WithdrawAsync(Guid accountID, TransactionCreateDto dto)
+        //Withdraw Service
+        public async Task<TransactionDto> WithdrawAsync(Guid accountId, TransactionCreateDto dto)
         {
             if (dto.Amount <= 0)
-                throw new ArgumentException("Withdrawal Amount Must be Greater than zero.");
+                throw new ArgumentException("Withdrawal amount must be greater than zero.");
 
-            var account = await _context.Accounts.FindAsync(accountID);
+            var account = await _context.Accounts.FindAsync(accountId);
             if (account == null)
                 throw new ArgumentException("Account not found.");
 
             if (account.Balance < dto.Amount)
                 throw new InvalidOperationException("Insufficient funds for withdrawal.");
 
-            account.Balance -= dto.Amount;
-            
-            var transaction = new Transaction
+            try
             {
-                AccountId = accountID,
-                Amount = dto.Amount,
-                TransactionDate = DateTime.UtcNow,
-                TransactionType = "Withdrawal"
-            };
+                account.Balance -= dto.Amount;
 
-            _context.Transactions.Add(transaction);
-            await _context.SaveChangesAsync();
+                var transaction = new Transaction
+                {
+                    AccountId = accountId,
+                    Amount = dto.Amount,
+                    TransactionDate = DateTime.UtcNow,
+                    TransactionType = "Withdrawal",
+                    BalanceAfterTransaction = account.Balance
+                };
 
-            return new TransactionDto
+                _context.Transactions.Add(transaction);
+                await _context.SaveChangesAsync();
+
+                return new TransactionDto
+                {
+                    Id = transaction.Id,
+                    Amount = transaction.Amount,
+                    TransactionDate = transaction.TransactionDate,
+                    TransactionType = transaction.TransactionType,
+                    AccountId = transaction.AccountId,
+                    BalanceAfterTransaction = transaction.BalanceAfterTransaction
+                };
+            }
+            catch (DbUpdateException dbEx)
             {
-                Id = transaction.Id,
-                Amount = transaction.Amount,
-                TransactionDate = transaction.TransactionDate,
-                TransactionType = transaction.TransactionType,
-                AccountId = transaction.AccountId
-            };
+                // Log the error as needed
+                throw new Exception("Database update error during withdrawal. Please try again.", dbEx);
+            }
+            catch (Exception ex)
+            {
+                // Log the error as needed
+                throw new Exception("An unexpected error occurred during withdrawal.", ex);
+            }
         }
-        
+
+        //Get Transaction History
+        public async Task<List<TransactionHistoryDto>> GetTransactionHistoryAsync(Guid accountId)
+        {
+            return await _context.Transactions
+                .Where(t => t.AccountId == accountId)
+                .Select(t => new TransactionHistoryDto
+                {
+                    Id = t.Id,
+                    Amount = t.Amount,
+                    TransactionDate = t.TransactionDate,
+                    TransactionType = t.TransactionType,
+                    BalanceAfterTransaction = t.BalanceAfterTransaction
+                })
+                .ToListAsync();
+        }
+
+
     }
 }

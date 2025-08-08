@@ -26,5 +26,9 @@ namespace BankApi.Models
         public Guid AccountId { get; set; }
         public Account Account { get; set; } = null!;
 
+        [Required]
+        //i forgor this field, but it will represent the balance after the transaction
+        public decimal BalanceAfterTransaction { get; set; }
+
     }
 }   
